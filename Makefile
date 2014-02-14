@@ -2,17 +2,19 @@ LIBSRC=$(wildcard VTFLib/*.cpp)
 LIBOBJ=$(LIBSRC:.cpp=.o)
 LIBOUT=lib/libvtf.a
 
+DYLIBOUT=lib/libvtf.dylib
+
 BINSRC=$(wildcard VTFCmd/*.c)
 BINOBJ=$(BINSRC:.c=.o)
 BINOUT=bin/vtfcmd
 
 # C++ compiler flags (-g -O2 -Wall)
-CCFLAGS=-g -O2 -Wall
-CFLAGS=-g -O2 -Wall
+CCFLAGS=-g -Os -Wall
+CFLAGS=-g -Os -Wall
 
 # compiler
-CCC=g++
-CC=gcc
+CCC=clang++
+CC=clang
 
 # compile flags
 LDFLAGS=-g
@@ -27,6 +29,9 @@ $(BINOUT): $(LIBOUT) $(BINOBJ)
 
 $(LIBOUT): $(LIBOBJ)
 	ar rcs $(LIBOUT) $(LIBOBJ)
+	
+$(DYLIBOUT): $(LIBOBJ)
+	$(CCC) $(CCFLAGS) -dynamiclib -o $(DYLIBOUT) $(LIBOBJ)
 
 .cpp.o:
 	$(CCC) $(CCFLAGS) -c $< -o $@
@@ -35,8 +40,7 @@ clean: cleanlib cleanbin
 	rm -f Makefile.bak
 
 cleanlib:
-	rm -f $(LIBOBJ) $(LIBOUT)
+	rm -f $(LIBOBJ) $(LIBOUT) $(DYLIBOUT)
 
 cleanbin:
 	rm -f $(BINOBJ) $(BINOUT)
-
