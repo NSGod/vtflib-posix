@@ -31,7 +31,7 @@ $(LIBOUT): $(LIBOBJ)
 	ar rcs $(LIBOUT) $(LIBOBJ)
 	
 $(DYLIBOUT): $(LIBOBJ)
-	$(CCC) $(CCFLAGS) -install_name "@rpath/libvtf.dylib" -dynamiclib -o $(DYLIBOUT) $(LIBOBJ)
+	$(CCC) $(CCFLAGS) -install_name "@rpath/libvtf.dylib" -dynamiclib -compatibility_version 1.3 -current_version 1.3.2 -o $(DYLIBOUT) $(LIBOBJ)
 
 .cpp.o:
 	$(CCC) $(CCFLAGS) -c $< -o $@
